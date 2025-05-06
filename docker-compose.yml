@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - ./dumps:/app/dumps
+    depends_on:
+      - db
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - autoria_network
+
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    networks:
+      - autoria_network
+
+networks:
+  autoria_network:
+    driver: bridge
+
+volumes:
+  postgres_data: 
